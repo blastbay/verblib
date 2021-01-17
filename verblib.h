@@ -1,12 +1,12 @@
 /* Reverb Library
-* Verblib version 0.1 - 2021-01-17
+* Verblib version 0.2 - 2021-01-17
 *
 * Philip Bennefall - philip@blastbay.com
 *
 * See the end of this file for licensing terms.
 * This reverb is based on Freeverb, a public domain reverb written by Jezar at Dreampoint.
 *
-* IMPORTANT: The reverb currently only works with 2 channels, at a sample rate of 44100 HZ.
+* IMPORTANT: The reverb currently only works with 1 or 2 channels, at a sample rate of 44100 HZ.
 * These restrictions will be lifted in a future version.
 *
 * USAGE
@@ -371,9 +371,9 @@ int verblib_initialize ( verblib* verb, unsigned long sample_rate, unsigned int 
 {
     int i;
 
-    if ( channels != 2 )
+    if ( channels != 1 && channels != 2 )
     {
-        return 0;    /* Currently supports only 2 channels; this will be fixed soon. */
+        return 0;    /* Currently supports only 1 or 2 channels. */
     }
 
     if ( sample_rate != 44100 )
@@ -436,32 +436,62 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
     int i;
     float outL, outR, input;
 
-    while ( frames-- > 0 )
+    if ( verb->channels == 1 )
     {
-        outL = outR = 0.0f;
-        input = ( input_buffer[0] + input_buffer[1] ) * verb->gain;
-
-        /* Accumulate comb filters in parallel. */
-        for ( i = 0; i < numcombs; i++ )
+        while ( frames-- > 0 )
         {
-            outL += verblib_comb_process ( &verb->combL[i], input );
-            outR += verblib_comb_process ( &verb->combR[i], input );
-        }
+            outL = 0.0f;
+            input = ( input_buffer[0] * 2.0f ) * verb->gain;
 
-        /* Feed through allpasses in series. */
-        for ( i = 0; i < numallpasses; i++ )
+            /* Accumulate comb filters in parallel. */
+            for ( i = 0; i < numcombs; i++ )
+            {
+                outL += verblib_comb_process ( &verb->combL[i], input );
+            }
+
+            /* Feed through allpasses in series. */
+            for ( i = 0; i < numallpasses; i++ )
+            {
+                outL = verblib_allpass_process ( &verb->allpassL[i], outL );
+            }
+
+            /* Calculate output REPLACING anything already there. */
+            output_buffer[0] = outL * verb->wet1 + input_buffer[0] * verb->dry;
+
+            /* Increment sample pointers. */
+            ++input_buffer;
+            ++output_buffer;
+        }
+    }
+    else if ( verb->channels == 2 )
+    {
+        while ( frames-- > 0 )
         {
-            outL = verblib_allpass_process ( &verb->allpassL[i], outL );
-            outR = verblib_allpass_process ( &verb->allpassR[i], outR );
+            outL = outR = 0.0f;
+            input = ( input_buffer[0] + input_buffer[1] ) * verb->gain;
+
+            /* Accumulate comb filters in parallel. */
+            for ( i = 0; i < numcombs; i++ )
+            {
+                outL += verblib_comb_process ( &verb->combL[i], input );
+                outR += verblib_comb_process ( &verb->combR[i], input );
+            }
+
+            /* Feed through allpasses in series. */
+            for ( i = 0; i < numallpasses; i++ )
+            {
+                outL = verblib_allpass_process ( &verb->allpassL[i], outL );
+                outR = verblib_allpass_process ( &verb->allpassR[i], outR );
+            }
+
+            /* Calculate output REPLACING anything already there. */
+            output_buffer[0] = outL * verb->wet1 + outR * verb->wet2 + input_buffer[0] * verb->dry;
+            output_buffer[1] = outR * verb->wet1 + outL * verb->wet2 + input_buffer[1] * verb->dry;
+
+            /* Increment sample pointers. */
+            input_buffer += 2;
+            output_buffer += 2;
         }
-
-        /* Calculate output REPLACING anything already there. */
-        output_buffer[0] = outL * verb->wet1 + outR * verb->wet2 + input_buffer[0] * verb->dry;
-        output_buffer[1] = outR * verb->wet1 + outL * verb->wet2 + input_buffer[1] * verb->dry;
-
-        /* Increment sample pointers. */
-        input_buffer += verb->channels;
-        output_buffer += verb->channels;
     }
 }
 
@@ -537,6 +567,9 @@ float verblib_get_mode ( const verblib* verb )
 #endif /* VERBLIB_IMPLEMENTATION */
 
 /* REVISION HISTORY
+*
+* Version 0.2 - 2021-01-17
+* Added support for processing mono audio.
 *
 * Version 0.1 - 2021-01-17
 * Initial release.

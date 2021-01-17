@@ -5,7 +5,7 @@ This is a reverb implementation originally based on Freeverb, a public domain re
 The library is written in C and is distributed as a single header file. It should compile on pretty much any platform with a C89 compiler as long as floats are available. If you find a platform on which it does not work, please let me know.
 
 
-IMPORTANT: The reverb currently only works with 2 channels, at a sample rate of 44100 HZ.
+IMPORTANT: The reverb currently only works with 1 or 2 channels, at a sample rate of 44100 HZ.
 These restrictions will be lifted in a future version.
 
 
