@@ -1,18 +1,18 @@
 # Introduction
-This is a reverb implementation originally based on Freeverb, a public domain reverb written by Jezar at Dreampoint in 2000.
+This is a reverb implementation based on Freeverb, a public domain reverb written by Jezar at Dreampoint in 2000.
 
 
 The library is written in C and is distributed as a single header file. It should compile on pretty much any platform with a C89 compiler as long as floats are available. If you find a platform on which it does not work, please let me know.
 
 
-IMPORTANT: The reverb currently only works with 1 or 2 channels, at a sample rate of 44100 HZ.
-These restrictions will be lifted in a future version.
+IMPORTANT: The reverb currently only works with 1 or 2 channels, at sample rates of 22050 HZ and above.
+These restrictions may be lifted in a future version.
 
 
 # Features
 verblib has the following notable features:
 * Easy to integrate (the library is stored in a single file).
-* Several settings can be tweaked to change the sound of the reverb, such as the size of the room, the amount of damping and the stereo width.
+* Parameters such as room size, damping and stereo width.
 * Portable ANSI C89 code with no external dependencies.
 * No licensing restrictions (public domain or MIT licensed with no attribution requirements).
 
