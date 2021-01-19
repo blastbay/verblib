@@ -114,52 +114,52 @@ extern "C" {
     };
 
     /* Reverb model tuning values */
-#define numcombs 8
-#define numallpasses 4
-#define muted 0.0f
-#define fixedgain 0.015f
-#define scalewet 3.0f
-#define scaledry 2.0f
-#define scaledamp 0.4f
-#define scaleroom 0.28f
-#define offsetroom 0.7f
-#define initialroom 0.5f
-#define initialdamp 0.5f
-#define initialwet 1.0f/scalewet
-#define initialdry 0.0f
-#define initialwidth 1.0f
-#define initialmode 0.0f
-#define freezemode 0.5f
-#define stereospread 23
+#define verblib_numcombs 8
+#define verblib_numallpasses 4
+#define verblib_muted 0.0f
+#define verblib_fixedgain 0.015f
+#define verblib_scalewet 3.0f
+#define verblib_scaledry 2.0f
+#define verblib_scaledamp 0.4f
+#define verblib_scaleroom 0.28f
+#define verblib_offsetroom 0.7f
+#define verblib_initialroom 0.5f
+#define verblib_initialdamp 0.5f
+#define verblib_initialwet 1.0f/verblib_scalewet
+#define verblib_initialdry 0.0f
+#define verblib_initialwidth 1.0f
+#define verblib_initialmode 0.0f
+#define verblib_freezemode 0.5f
+#define verblib_stereospread 23
 
     /*
-    * These values assume 44.1KHz sample rate, but will be scaled appropriately.
+    * These values assume 44.1KHz sample rate, but will be verblib_scaled appropriately.
     * The values were obtained by listening tests.
     */
-#define combtuningL1 1116
-#define combtuningR1 1116+stereospread
-#define combtuningL2 1188
-#define combtuningR2 1188+stereospread
-#define combtuningL3 1277
-#define combtuningR3 1277+stereospread
-#define combtuningL4 1356
-#define combtuningR4 1356+stereospread
-#define combtuningL5 1422
-#define combtuningR5 1422+stereospread
-#define combtuningL6 1491
-#define combtuningR6 1491+stereospread
-#define combtuningL7 1557
-#define combtuningR7 1557+stereospread
-#define combtuningL8 1617
-#define combtuningR8 1617+stereospread
-#define allpasstuningL1 556
-#define allpasstuningR1 556+stereospread
-#define allpasstuningL2 441
-#define allpasstuningR2 441+stereospread
-#define allpasstuningL3 341
-#define allpasstuningR3 341+stereospread
-#define allpasstuningL4 225
-#define allpasstuningR4 225+stereospread
+#define verblib_combtuningL1 1116
+#define verblib_combtuningR1 (1116+verblib_stereospread)
+#define verblib_combtuningL2 1188
+#define verblib_combtuningR2 (1188+verblib_stereospread)
+#define verblib_combtuningL3 1277
+#define verblib_combtuningR3 (1277+verblib_stereospread)
+#define verblib_combtuningL4 1356
+#define verblib_combtuningR4 (1356+verblib_stereospread)
+#define verblib_combtuningL5 1422
+#define verblib_combtuningR5 (1422+verblib_stereospread)
+#define verblib_combtuningL6 1491
+#define verblib_combtuningR6 (1491+verblib_stereospread)
+#define verblib_combtuningL7 1557
+#define verblib_combtuningR7 (1557+verblib_stereospread)
+#define verblib_combtuningL8 1617
+#define verblib_combtuningR8 (1617+verblib_stereospread)
+#define verblib_allpasstuningL1 556
+#define verblib_allpasstuningR1 (556+verblib_stereospread)
+#define verblib_allpasstuningL2 441
+#define verblib_allpasstuningR2 (441+verblib_stereospread)
+#define verblib_allpasstuningL3 341
+#define verblib_allpasstuningR3 (341+verblib_stereospread)
+#define verblib_allpasstuningL4 225
+#define verblib_allpasstuningR4 (225+verblib_stereospread)
 
     /* The main reverb structure. This is the structure that you will create an instance of when using the reverb. */
     struct verblib
@@ -179,40 +179,40 @@ extern "C" {
         */
 
         /* Comb filters */
-        verblib_comb combL[numcombs];
-        verblib_comb combR[numcombs];
+        verblib_comb combL[verblib_numcombs];
+        verblib_comb combR[verblib_numcombs];
 
         /* Allpass filters */
-        verblib_allpass allpassL[numallpasses];
-        verblib_allpass allpassR[numallpasses];
+        verblib_allpass allpassL[verblib_numallpasses];
+        verblib_allpass allpassR[verblib_numallpasses];
 
         /* Buffers for the combs */
-        float bufcombL1[combtuningL1* verblib_max_sample_rate_multiplier];
-        float bufcombR1[ ( combtuningR1 ) * verblib_max_sample_rate_multiplier];
-        float bufcombL2[combtuningL2* verblib_max_sample_rate_multiplier];
-        float bufcombR2[ ( combtuningR2 ) * verblib_max_sample_rate_multiplier];
-        float bufcombL3[combtuningL3* verblib_max_sample_rate_multiplier];
-        float bufcombR3[ ( combtuningR3 ) * verblib_max_sample_rate_multiplier];
-        float bufcombL4[combtuningL4* verblib_max_sample_rate_multiplier];
-        float bufcombR4[ ( combtuningR4 ) * verblib_max_sample_rate_multiplier];
-        float bufcombL5[combtuningL5* verblib_max_sample_rate_multiplier];
-        float bufcombR5[ ( combtuningR5 ) * verblib_max_sample_rate_multiplier];
-        float bufcombL6[combtuningL6* verblib_max_sample_rate_multiplier];
-        float bufcombR6[ ( combtuningR6 ) * verblib_max_sample_rate_multiplier];
-        float bufcombL7[combtuningL7* verblib_max_sample_rate_multiplier];
-        float bufcombR7[ ( combtuningR7 ) * verblib_max_sample_rate_multiplier];
-        float bufcombL8[combtuningL8* verblib_max_sample_rate_multiplier];
-        float bufcombR8[ ( combtuningR8 ) * verblib_max_sample_rate_multiplier];
+        float bufcombL1[verblib_combtuningL1* verblib_max_sample_rate_multiplier];
+        float bufcombR1[verblib_combtuningR1* verblib_max_sample_rate_multiplier];
+        float bufcombL2[verblib_combtuningL2* verblib_max_sample_rate_multiplier];
+        float bufcombR2[verblib_combtuningR2* verblib_max_sample_rate_multiplier];
+        float bufcombL3[verblib_combtuningL3* verblib_max_sample_rate_multiplier];
+        float bufcombR3[verblib_combtuningR3* verblib_max_sample_rate_multiplier];
+        float bufcombL4[verblib_combtuningL4* verblib_max_sample_rate_multiplier];
+        float bufcombR4[verblib_combtuningR4* verblib_max_sample_rate_multiplier];
+        float bufcombL5[verblib_combtuningL5* verblib_max_sample_rate_multiplier];
+        float bufcombR5[verblib_combtuningR5* verblib_max_sample_rate_multiplier];
+        float bufcombL6[verblib_combtuningL6* verblib_max_sample_rate_multiplier];
+        float bufcombR6[verblib_combtuningR6* verblib_max_sample_rate_multiplier];
+        float bufcombL7[verblib_combtuningL7* verblib_max_sample_rate_multiplier];
+        float bufcombR7[verblib_combtuningR7* verblib_max_sample_rate_multiplier];
+        float bufcombL8[verblib_combtuningL8* verblib_max_sample_rate_multiplier];
+        float bufcombR8[verblib_combtuningR8* verblib_max_sample_rate_multiplier];
 
         /* Buffers for the allpasses */
-        float bufallpassL1[allpasstuningL1* verblib_max_sample_rate_multiplier];
-        float bufallpassR1[ ( allpasstuningR1 ) * verblib_max_sample_rate_multiplier];
-        float bufallpassL2[allpasstuningL2* verblib_max_sample_rate_multiplier];
-        float bufallpassR2[ ( allpasstuningR2 ) * verblib_max_sample_rate_multiplier];
-        float bufallpassL3[allpasstuningL3* verblib_max_sample_rate_multiplier];
-        float bufallpassR3[ ( allpasstuningR3 ) * verblib_max_sample_rate_multiplier];
-        float bufallpassL4[allpasstuningL4* verblib_max_sample_rate_multiplier];
-        float bufallpassR4[ ( allpasstuningR4 ) * verblib_max_sample_rate_multiplier];
+        float bufallpassL1[verblib_allpasstuningL1* verblib_max_sample_rate_multiplier];
+        float bufallpassR1[verblib_allpasstuningR1* verblib_max_sample_rate_multiplier];
+        float bufallpassL2[verblib_allpasstuningL2* verblib_max_sample_rate_multiplier];
+        float bufallpassR2[verblib_allpasstuningR2* verblib_max_sample_rate_multiplier];
+        float bufallpassL3[verblib_allpasstuningL3* verblib_max_sample_rate_multiplier];
+        float bufallpassR3[verblib_allpasstuningR3* verblib_max_sample_rate_multiplier];
+        float bufallpassL4[verblib_allpasstuningL4* verblib_max_sample_rate_multiplier];
+        float bufallpassR4[verblib_allpasstuningR4* verblib_max_sample_rate_multiplier];
     };
 
 #ifdef __cplusplus
@@ -328,20 +328,20 @@ static void verblib_update ( verblib* verb )
     verb->wet1 = verb->wet * ( verb->width / 2.0f + 0.5f );
     verb->wet2 = verb->wet * ( ( 1.0f - verb->width ) / 2.0f );
 
-    if ( verb->mode >= freezemode )
+    if ( verb->mode >= verblib_freezemode )
     {
         verb->roomsize1 = 1.0f;
         verb->damp1 = 0.0f;
-        verb->gain = muted;
+        verb->gain = verblib_muted;
     }
     else
     {
         verb->roomsize1 = verb->roomsize;
         verb->damp1 = verb->damp;
-        verb->gain = fixedgain;
+        verb->gain = verblib_fixedgain;
     }
 
-    for ( i = 0; i < numcombs; i++ )
+    for ( i = 0; i < verblib_numcombs; i++ )
     {
         verb->combL[i].feedback = verb->roomsize1;
         verb->combR[i].feedback = verb->roomsize1;
@@ -354,24 +354,24 @@ static void verblib_update ( verblib* verb )
 static void verblib_mute ( verblib* verb )
 {
     int i;
-    if ( verblib_get_mode ( verb ) >= freezemode )
+    if ( verblib_get_mode ( verb ) >= verblib_freezemode )
     {
         return;
     }
 
-    for ( i = 0; i < numcombs; i++ )
+    for ( i = 0; i < verblib_numcombs; i++ )
     {
         verblib_comb_mute ( &verb->combL[i] );
         verblib_comb_mute ( &verb->combR[i] );
     }
-    for ( i = 0; i < numallpasses; i++ )
+    for ( i = 0; i < verblib_numallpasses; i++ )
     {
         verblib_allpass_mute ( &verb->allpassL[i] );
         verblib_allpass_mute ( &verb->allpassR[i] );
     }
 }
 
-static int verblib_get_scaled_buffer_size ( unsigned long sample_rate, unsigned long value )
+static int verblib_get_verblib_scaled_buffer_size ( unsigned long sample_rate, unsigned long value )
 {
     long double result = ( long double ) sample_rate;
     result /= 44100.0;
@@ -403,45 +403,45 @@ int verblib_initialize ( verblib* verb, unsigned long sample_rate, unsigned int 
     verb->channels = channels;
 
     /* Tie the components to their buffers. */
-    verblib_comb_initialize ( &verb->combL[0], verb->bufcombL1, verblib_get_scaled_buffer_size ( sample_rate, combtuningL1 ) );
-    verblib_comb_initialize ( &verb->combR[0], verb->bufcombR1, verblib_get_scaled_buffer_size ( sample_rate, combtuningR1 ) );
-    verblib_comb_initialize ( &verb->combL[1], verb->bufcombL2, verblib_get_scaled_buffer_size ( sample_rate, combtuningL2 ) );
-    verblib_comb_initialize ( &verb->combR[1], verb->bufcombR2, verblib_get_scaled_buffer_size ( sample_rate, combtuningR2 ) );
-    verblib_comb_initialize ( &verb->combL[2], verb->bufcombL3, verblib_get_scaled_buffer_size ( sample_rate, combtuningL3 ) );
-    verblib_comb_initialize ( &verb->combR[2], verb->bufcombR3, verblib_get_scaled_buffer_size ( sample_rate, combtuningR3 ) );
-    verblib_comb_initialize ( &verb->combL[3], verb->bufcombL4, verblib_get_scaled_buffer_size ( sample_rate, combtuningL4 ) );
-    verblib_comb_initialize ( &verb->combR[3], verb->bufcombR4, verblib_get_scaled_buffer_size ( sample_rate, combtuningR4 ) );
-    verblib_comb_initialize ( &verb->combL[4], verb->bufcombL5, verblib_get_scaled_buffer_size ( sample_rate, combtuningL5 ) );
-    verblib_comb_initialize ( &verb->combR[4], verb->bufcombR5, verblib_get_scaled_buffer_size ( sample_rate, combtuningR5 ) );
-    verblib_comb_initialize ( &verb->combL[5], verb->bufcombL6, verblib_get_scaled_buffer_size ( sample_rate, combtuningL6 ) );
-    verblib_comb_initialize ( &verb->combR[5], verb->bufcombR6, verblib_get_scaled_buffer_size ( sample_rate, combtuningR6 ) );
-    verblib_comb_initialize ( &verb->combL[6], verb->bufcombL7, verblib_get_scaled_buffer_size ( sample_rate, combtuningL7 ) );
-    verblib_comb_initialize ( &verb->combR[6], verb->bufcombR7, verblib_get_scaled_buffer_size ( sample_rate, combtuningR7 ) );
-    verblib_comb_initialize ( &verb->combL[7], verb->bufcombL8, verblib_get_scaled_buffer_size ( sample_rate, combtuningL8 ) );
-    verblib_comb_initialize ( &verb->combR[7], verb->bufcombR8, verblib_get_scaled_buffer_size ( sample_rate, combtuningR8 ) );
+    verblib_comb_initialize ( &verb->combL[0], verb->bufcombL1, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL1 ) );
+    verblib_comb_initialize ( &verb->combR[0], verb->bufcombR1, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR1 ) );
+    verblib_comb_initialize ( &verb->combL[1], verb->bufcombL2, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL2 ) );
+    verblib_comb_initialize ( &verb->combR[1], verb->bufcombR2, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR2 ) );
+    verblib_comb_initialize ( &verb->combL[2], verb->bufcombL3, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL3 ) );
+    verblib_comb_initialize ( &verb->combR[2], verb->bufcombR3, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR3 ) );
+    verblib_comb_initialize ( &verb->combL[3], verb->bufcombL4, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL4 ) );
+    verblib_comb_initialize ( &verb->combR[3], verb->bufcombR4, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR4 ) );
+    verblib_comb_initialize ( &verb->combL[4], verb->bufcombL5, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL5 ) );
+    verblib_comb_initialize ( &verb->combR[4], verb->bufcombR5, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR5 ) );
+    verblib_comb_initialize ( &verb->combL[5], verb->bufcombL6, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL6 ) );
+    verblib_comb_initialize ( &verb->combR[5], verb->bufcombR6, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR6 ) );
+    verblib_comb_initialize ( &verb->combL[6], verb->bufcombL7, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL7 ) );
+    verblib_comb_initialize ( &verb->combR[6], verb->bufcombR7, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR7 ) );
+    verblib_comb_initialize ( &verb->combL[7], verb->bufcombL8, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningL8 ) );
+    verblib_comb_initialize ( &verb->combR[7], verb->bufcombR8, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_combtuningR8 ) );
 
-    verblib_allpass_initialize ( &verb->allpassL[0], verb->bufallpassL1, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningL1 ) );
-    verblib_allpass_initialize ( &verb->allpassR[0], verb->bufallpassR1, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningR1 ) );
-    verblib_allpass_initialize ( &verb->allpassL[1], verb->bufallpassL2, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningL2 ) );
-    verblib_allpass_initialize ( &verb->allpassR[1], verb->bufallpassR2, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningR2 ) );
-    verblib_allpass_initialize ( &verb->allpassL[2], verb->bufallpassL3, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningL3 ) );
-    verblib_allpass_initialize ( &verb->allpassR[2], verb->bufallpassR3, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningR3 ) );
-    verblib_allpass_initialize ( &verb->allpassL[3], verb->bufallpassL4, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningL4 ) );
-    verblib_allpass_initialize ( &verb->allpassR[3], verb->bufallpassR4, verblib_get_scaled_buffer_size ( sample_rate, allpasstuningR4 ) );
+    verblib_allpass_initialize ( &verb->allpassL[0], verb->bufallpassL1, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningL1 ) );
+    verblib_allpass_initialize ( &verb->allpassR[0], verb->bufallpassR1, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningR1 ) );
+    verblib_allpass_initialize ( &verb->allpassL[1], verb->bufallpassL2, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningL2 ) );
+    verblib_allpass_initialize ( &verb->allpassR[1], verb->bufallpassR2, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningR2 ) );
+    verblib_allpass_initialize ( &verb->allpassL[2], verb->bufallpassL3, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningL3 ) );
+    verblib_allpass_initialize ( &verb->allpassR[2], verb->bufallpassR3, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningR3 ) );
+    verblib_allpass_initialize ( &verb->allpassL[3], verb->bufallpassL4, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningL4 ) );
+    verblib_allpass_initialize ( &verb->allpassR[3], verb->bufallpassR4, verblib_get_verblib_scaled_buffer_size ( sample_rate, verblib_allpasstuningR4 ) );
 
     /* Set default values. */
-    for ( i = 0; i < numallpasses; i++ )
+    for ( i = 0; i < verblib_numallpasses; i++ )
     {
         verb->allpassL[i].feedback = 0.5f;
         verb->allpassR[i].feedback = 0.5f;
     }
 
-    verblib_set_wet ( verb, initialwet );
-    verblib_set_room_size ( verb, initialroom );
-    verblib_set_dry ( verb, initialdry );
-    verblib_set_damping ( verb, initialdamp );
-    verblib_set_width ( verb, initialwidth );
-    verblib_set_mode ( verb, initialmode );
+    verblib_set_wet ( verb, verblib_initialwet );
+    verblib_set_room_size ( verb, verblib_initialroom );
+    verblib_set_dry ( verb, verblib_initialdry );
+    verblib_set_damping ( verb, verblib_initialdamp );
+    verblib_set_width ( verb, verblib_initialwidth );
+    verblib_set_mode ( verb, verblib_initialmode );
 
     /* The buffers will be full of rubbish - so we MUST mute them. */
     verblib_mute ( verb );
@@ -462,13 +462,13 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
             input = ( input_buffer[0] * 2.0f ) * verb->gain;
 
             /* Accumulate comb filters in parallel. */
-            for ( i = 0; i < numcombs; i++ )
+            for ( i = 0; i < verblib_numcombs; i++ )
             {
                 outL += verblib_comb_process ( &verb->combL[i], input );
             }
 
             /* Feed through allpasses in series. */
-            for ( i = 0; i < numallpasses; i++ )
+            for ( i = 0; i < verblib_numallpasses; i++ )
             {
                 outL = verblib_allpass_process ( &verb->allpassL[i], outL );
             }
@@ -489,14 +489,14 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
             input = ( input_buffer[0] + input_buffer[1] ) * verb->gain;
 
             /* Accumulate comb filters in parallel. */
-            for ( i = 0; i < numcombs; i++ )
+            for ( i = 0; i < verblib_numcombs; i++ )
             {
                 outL += verblib_comb_process ( &verb->combL[i], input );
                 outR += verblib_comb_process ( &verb->combR[i], input );
             }
 
             /* Feed through allpasses in series. */
-            for ( i = 0; i < numallpasses; i++ )
+            for ( i = 0; i < verblib_numallpasses; i++ )
             {
                 outL = verblib_allpass_process ( &verb->allpassL[i], outL );
                 outR = verblib_allpass_process ( &verb->allpassR[i], outR );
@@ -515,45 +515,45 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
 
 void verblib_set_room_size ( verblib* verb, float value )
 {
-    verb->roomsize = ( value * scaleroom ) + offsetroom;
+    verb->roomsize = ( value * verblib_scaleroom ) + verblib_offsetroom;
     verblib_update ( verb );
 }
 
 float verblib_get_room_size ( const verblib* verb )
 {
-    return ( verb->roomsize - offsetroom ) / scaleroom;
+    return ( verb->roomsize - verblib_offsetroom ) / verblib_scaleroom;
 }
 
 void verblib_set_damping ( verblib* verb, float value )
 {
-    verb->damp = value * scaledamp;
+    verb->damp = value * verblib_scaledamp;
     verblib_update ( verb );
 }
 
 float verblib_get_damping ( const verblib* verb )
 {
-    return verb->damp / scaledamp;
+    return verb->damp / verblib_scaledamp;
 }
 
 void verblib_set_wet ( verblib* verb, float value )
 {
-    verb->wet = value * scalewet;
+    verb->wet = value * verblib_scalewet;
     verblib_update ( verb );
 }
 
 float verblib_get_wet ( const verblib* verb )
 {
-    return verb->wet / scalewet;
+    return verb->wet / verblib_scalewet;
 }
 
 void verblib_set_dry ( verblib* verb, float value )
 {
-    verb->dry = value * scaledry;
+    verb->dry = value * verblib_scaledry;
 }
 
 float verblib_get_dry ( const verblib* verb )
 {
-    return verb->dry / scaledry;
+    return verb->dry / verblib_scaledry;
 }
 
 void verblib_set_width ( verblib* verb, float value )
@@ -575,7 +575,7 @@ void verblib_set_mode ( verblib* verb, float value )
 
 float verblib_get_mode ( const verblib* verb )
 {
-    if ( verb->mode >= freezemode )
+    if ( verb->mode >= verblib_freezemode )
     {
         return 1.0f;
     }
