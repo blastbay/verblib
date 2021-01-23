@@ -129,11 +129,11 @@ extern "C" {
 #define verblib_fixedgain 0.015f
 #define verblib_scalewet 3.0f
 #define verblib_scaledry 2.0f
-#define verblib_scaledamp 0.4f
+#define verblib_scaledamp 0.8f
 #define verblib_scaleroom 0.28f
 #define verblib_offsetroom 0.7f
 #define verblib_initialroom 0.5f
-#define verblib_initialdamp 0.5f
+#define verblib_initialdamp 0.25f
 #define verblib_initialwet 1.0f/verblib_scalewet
 #define verblib_initialdry 0.0f
 #define verblib_initialwidth 1.0f
