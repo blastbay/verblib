@@ -1,5 +1,5 @@
 /* Reverb Library
-* Verblib version 0.3 - 2021-01-18
+* Verblib version 0.4 - 2021-01-23
 *
 * Philip Bennefall - philip@blastbay.com
 *
@@ -30,6 +30,11 @@ extern "C" {
     /* The maximum sample rate that should be supported, specified as a multiple of 44100. */
 #ifndef verblib_max_sample_rate_multiplier
 #define verblib_max_sample_rate_multiplier 4
+#endif
+
+    /* The silence threshold which is used when calculating decay time. */
+#ifndef verblib_silence_threshold
+#define verblib_silence_threshold 80.0 /* In dB (absolute). */
 #endif
 
     /* PUBLIC API */
@@ -87,6 +92,10 @@ extern "C" {
 
     /* Get the mode of the reverb. */
     float verblib_get_mode ( const verblib* verb );
+
+    /* Get the decay time in sample frames based on the current room size setting. */
+    /* If freeze mode is active, the decay time is infinite and this function returns 0. */
+    unsigned long verblib_get_decay_time_in_frames ( const verblib* verb );
 
     /* INTERNAL STRUCTURES */
 
@@ -226,6 +235,7 @@ extern "C" {
 #ifdef VERBLIB_IMPLEMENTATION
 
 #include <stddef.h>
+#include <math.h>
 
 #ifdef _MSC_VER
 #define VERBLIB_INLINE __forceinline
@@ -582,9 +592,26 @@ float verblib_get_mode ( const verblib* verb )
     return 0.0f;
 }
 
+unsigned long verblib_get_decay_time_in_frames ( const verblib* verb )
+{
+    double decay;
+
+    if ( verb->mode >= verblib_freezemode )
+    {
+        return 0; /* Freeze mode creates an infinite decay. */
+    }
+
+    decay = verblib_silence_threshold / fabs ( -20.0 * log ( 1.0 / verb->roomsize1 ) );
+    decay *= ( double ) ( verb->combR[7].bufsize * 2 );
+    return ( unsigned long ) decay;
+}
+
 #endif /* VERBLIB_IMPLEMENTATION */
 
 /* REVISION HISTORY
+*
+* Version 0.4 - 2021-01-23
+* Added a function called verblib_get_decay_time_in_frames.
 *
 * Version 0.3 - 2021-01-18
 * Added support for sample rates of 22050 and above.
