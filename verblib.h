@@ -1,5 +1,5 @@
 /* Reverb Library
-* Verblib version 0.4 - 2021-01-23
+* Verblib version 0.5 - 2022-10-25
 *
 * Philip Bennefall - philip@blastbay.com
 *
@@ -683,6 +683,9 @@ unsigned long verblib_get_decay_time_in_frames ( const verblib* verb )
 
 /* REVISION HISTORY
 *
+* Version 0.5 - 2022-10-25
+* Added two functions called verblib_set_input_width and verblib_get_input_width.
+*
 * Version 0.4 - 2021-01-23
 * Added a function called verblib_get_decay_time_in_frames.
 *
@@ -701,7 +704,7 @@ unsigned long verblib_get_decay_time_in_frames ( const verblib* verb )
 This software is available under 2 licenses -- choose whichever you prefer.
 ------------------------------------------------------------------------------
 ALTERNATIVE A - MIT No Attribution License
-Copyright (c) 2021 Philip Bennefall
+Copyright (c) 2022 Philip Bennefall
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

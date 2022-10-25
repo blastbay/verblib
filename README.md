@@ -12,7 +12,7 @@ These restrictions may be lifted in a future version.
 # Features
 verblib has the following notable features:
 * Easy to integrate (the library is stored in a single file).
-* Parameters such as room size, damping and stereo width.
+* Parameters such as room size, damping and stereo width (for both input and output).
 * Portable ANSI C89 code with no external dependencies.
 * No licensing restrictions (public domain or MIT licensed with no attribution requirements).
 
@@ -20,7 +20,7 @@ verblib has the following notable features:
 This software is available under 2 licenses -- choose whichever you prefer.
 
 ## ALTERNATIVE A - MIT No Attribution License
-Copyright (c) 2021 Philip Bennefall
+Copyright (c) 2022 Philip Bennefall
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
