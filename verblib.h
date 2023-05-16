@@ -21,6 +21,14 @@
 #ifndef VERBLIB_H
 #define VERBLIB_H
 
+#ifndef VERBLIB_PCM_TYPE
+#define VERBLIB_PCM_TYPE float
+#endif
+
+#ifndef VERBLIB_PCM_MAX_VALUE
+#define VERBLIB_PCM_MAX_VALUE 1.0f
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -55,7 +63,7 @@ extern "C" {
     * output_buffer may be the same pointer as input_buffer if in place processing is desired.
     * frames specifies the number of sample frames that should be processed.
     */
-    void verblib_process ( verblib* verb, const float* input_buffer, float* output_buffer, unsigned long frames );
+    void verblib_process ( verblib* verb, const VERBLIB_PCM_TYPE* input_buffer, VERBLIB_PCM_TYPE* output_buffer, unsigned long frames );
 
     /* Set the size of the room, between 0.0 and 1.0. */
     void verblib_set_room_size ( verblib* verb, float value );
@@ -472,7 +480,7 @@ int verblib_initialize ( verblib* verb, unsigned long sample_rate, unsigned int 
     return 1;
 }
 
-void verblib_process ( verblib* verb, const float* input_buffer, float* output_buffer, unsigned long frames )
+void verblib_process ( verblib* verb, const VERBLIB_PCM_TYPE* input_buffer, VERBLIB_PCM_TYPE* output_buffer, unsigned long frames )
 {
     int i;
     float outL, outR, input;
@@ -482,7 +490,7 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
         while ( frames-- > 0 )
         {
             outL = 0.0f;
-            input = ( input_buffer[0] * 2.0f ) * verb->gain;
+            input = ( (float)(input_buffer[0]) / VERBLIB_PCM_MAX_VALUE * 2.0f ) * verb->gain;
 
             /* Accumulate comb filters in parallel. */
             for ( i = 0; i < verblib_numcombs; i++ )
@@ -497,7 +505,7 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
             }
 
             /* Calculate output REPLACING anything already there. */
-            output_buffer[0] = outL * verb->wet1 + input_buffer[0] * verb->dry;
+            output_buffer[0] = (VERBLIB_PCM_TYPE)((outL * verb->wet1 + ((float)(input_buffer[0]) / VERBLIB_PCM_MAX_VALUE) * verb->dry) * VERBLIB_PCM_MAX_VALUE);
 
             /* Increment sample pointers. */
             ++input_buffer;
@@ -523,8 +531,8 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
             const float coef_side = verb->input_width * tmp;
             while ( frames-- > 0 )
             {
-                const float mid = ( input_buffer[0] + input_buffer[1] ) * coef_mid;
-                const float side = ( input_buffer[1] - input_buffer[0] ) * coef_side;
+                const float mid = ( (float)(input_buffer[0]) / VERBLIB_PCM_MAX_VALUE + (float)(input_buffer[1]) / VERBLIB_PCM_MAX_VALUE ) * coef_mid;
+                const float side = ( (float)(input_buffer[1]) / VERBLIB_PCM_MAX_VALUE - (float)(input_buffer[0]) / VERBLIB_PCM_MAX_VALUE ) * coef_side;
                 const float input_left = ( mid - side ) * ( verb->gain * 2.0f );
                 const float input_right = ( mid + side ) * ( verb->gain * 2.0f );
 
@@ -545,8 +553,8 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
                 }
 
                 /* Calculate output REPLACING anything already there. */
-                output_buffer[0] = outL * verb->wet1 + outR * verb->wet2 + input_buffer[0] * verb->dry;
-                output_buffer[1] = outR * verb->wet1 + outL * verb->wet2 + input_buffer[1] * verb->dry;
+                output_buffer[0] = (VERBLIB_PCM_TYPE)((outL * verb->wet1 + outR * verb->wet2 + ((float)(input_buffer[0]) / VERBLIB_PCM_MAX_VALUE) * verb->dry) * VERBLIB_PCM_MAX_VALUE);
+                output_buffer[1] = (VERBLIB_PCM_TYPE)((outR * verb->wet1 + outL * verb->wet2 + ((float)(input_buffer[1]) / VERBLIB_PCM_MAX_VALUE) * verb->dry) * VERBLIB_PCM_MAX_VALUE);
 
                 /* Increment sample pointers. */
                 input_buffer += 2;
@@ -558,7 +566,7 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
             while ( frames-- > 0 )
             {
                 outL = outR = 0.0f;
-                input = ( input_buffer[0] + input_buffer[1] ) * verb->gain;
+                input = ( (float)(input_buffer[0]) / VERBLIB_PCM_MAX_VALUE + (float)(input_buffer[1]) / VERBLIB_PCM_MAX_VALUE ) * verb->gain;
 
                 /* Accumulate comb filters in parallel. */
                 for ( i = 0; i < verblib_numcombs; i++ )
@@ -575,8 +583,8 @@ void verblib_process ( verblib* verb, const float* input_buffer, float* output_b
                 }
 
                 /* Calculate output REPLACING anything already there. */
-                output_buffer[0] = outL * verb->wet1 + outR * verb->wet2 + input_buffer[0] * verb->dry;
-                output_buffer[1] = outR * verb->wet1 + outL * verb->wet2 + input_buffer[1] * verb->dry;
+                output_buffer[0] = (VERBLIB_PCM_TYPE)((outL * verb->wet1 + outR * verb->wet2 + ((float)(input_buffer[0]) / VERBLIB_PCM_MAX_VALUE) * verb->dry) * VERBLIB_PCM_MAX_VALUE);
+                output_buffer[1] = (VERBLIB_PCM_TYPE)((outR * verb->wet1 + outL * verb->wet2 + ((float)(input_buffer[1]) / VERBLIB_PCM_MAX_VALUE) * verb->dry) * VERBLIB_PCM_MAX_VALUE);
 
                 /* Increment sample pointers. */
                 input_buffer += 2;
